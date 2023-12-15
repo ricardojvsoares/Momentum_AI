@@ -10,6 +10,17 @@ public class GameMomentumAB extends NodeGameAB {
     private int myColor;
     private int newR, newC;
 
+    private final int[][]  SCORES = {
+            {0, 1, 1, 1, 1, 1, 0},
+            {1, 2, 4, 4, 4, 2, 1},
+            {1, 4, 50, 100, 50, 4, 1},
+            {1, 4, 100, 1000, 100, 4, 1},
+            {1, 4, 50, 100, 50, 4, 1},
+            {1, 2, 4, 4, 4, 2, 1},
+            {0, 1, 1, 1, 1, 1, 0}
+    };
+
+
     public GameMomentumAB(String node) {
         super(1);
         myColor = getPlayer();
@@ -40,13 +51,11 @@ public class GameMomentumAB extends NodeGameAB {
     public ArrayList<Move> expandAB() {
         ArrayList<Move> successors = new ArrayList<>();
 
-        newBoard = makeCopy(board);
-
-        if (!boardEmpty(newBoard)) {
+        if (!boardEmpty(board)) {
             for (int r = 0; r < BOARD_SIZE; r++) {
                 for (int c = 0; c < BOARD_SIZE; c++) {
-                    if (newBoard[r][c] == 0) {
-                        GameMomentumAB successorBoard = new GameMomentumAB(performMove(newBoard, r, c), myColor, getDepth() + 1);
+                    if (board[r][c] == 0) {
+                        GameMomentumAB successorBoard = new GameMomentumAB(performMove(board, r, c), myColor, getDepth() + 1);
                         successors.add(new Move((r + 1) + " " + (c + 1), successorBoard));
                     }
                 }
@@ -54,9 +63,9 @@ public class GameMomentumAB extends NodeGameAB {
         }
 
         else {
-            GameMomentumAB centerBoard = new GameMomentumAB(performMove(newBoard, 3, 3), myColor, getDepth() + 1);
+            GameMomentumAB centerBoard = new GameMomentumAB(performMove(board, 3, 3), myColor, getDepth() + 1);
             successors.add(new Move("4 4", centerBoard));
-            return successors;
+
         }
 
         return successors;
@@ -74,8 +83,8 @@ public class GameMomentumAB extends NodeGameAB {
         return empty;
     }
 
-    private int[][] performMove(int[][] newBoard, int r, int c) {
-
+    private int[][] performMove(int[][] board, int r, int c) {
+        newBoard = makeCopy(board);
         newR = 0;
         newC = 0;
 
@@ -208,90 +217,28 @@ public class GameMomentumAB extends NodeGameAB {
             }
         }
 
+
         return newBoard;
     }
 
-
     @Override
     public double getH() {
-        int count = 0;
-        double h;
-        double pos = 1;
-        int op = 1;
-        if(myColor == 1){
-            op = 2;
-        }
+        double h = 0;
 
         for (int r = 0; r < BOARD_SIZE; r++) {
             for (int c = 0; c < BOARD_SIZE; c++) {
-                if (board[r][c] == myColor) {
-                    count++;
+                int value = SCORES[r][c];
+                int piece = board[r][c];
 
-                    if (isOnCenter(r, c)) {
-                        pos += 1000;
-                    } else if (isOnBoardEdge(r, c)) {
-                        pos += 0;
-                    } else if (isOnBoardLateral(r, c)) {
-                        pos += 0.5;
-                    } else if (isOnMiddle(r, c)) {
-                        pos += 1.5;
-                    } else if (isOfCenter(r, c)) {
-                        pos += 2.5;
-                    } else {
-                        pos += 5;
-                    }
-
-                } else if (board[r][c] != op) {
-                    count--;
-                    if (isOnCenter(r, c)) {
-                        pos = pos - 1000;
-                    } else if (isOnBoardEdge(r, c)) {
-                        pos -= 0;
-                    } else if (isOnBoardLateral(r, c)) {
-                        pos -= 0.5;
-                    } else if (isOnMiddle(r, c)) {
-                        pos -= 1.5;
-                    } else if (isOfCenter(r, c)) {
-                        pos -= 2.5;
-                    } else {
-                        pos -= 5;
-                    }
-
+                if (piece == myColor) {
+                    h += value;
+                } else if (piece != 0) {
+                    h -= value;
                 }
             }
         }
 
-        if( count < 0 && pos < 0){
-            return  0.0;
-        }
-        h = count * pos;
-        //h = (5 * dist + count) * pos;
-
-        if(h < 0){
-            return 0.0;
-        }
-
         return h;
-    }
-
-    private boolean isOfCenter(int r, int c) {
-        return r == 2 || c == 2 || r == BOARD_SIZE - 3 || c == BOARD_SIZE - 3;
-    }
-
-    private boolean isOnBoardEdge(int r, int c) {
-        return r == 0 && c == 0 || r == BOARD_SIZE - 1 && c == BOARD_SIZE - 1 || r == BOARD_SIZE - 1 && c == 0 || r == 0 && c == BOARD_SIZE - 1;
-    }
-
-    private boolean isOnBoardLateral(int r, int c) {
-        return r == 0 || c == 0 || r == BOARD_SIZE - 1 || c == BOARD_SIZE - 1;
-    }
-
-    private boolean isOnMiddle(int r, int c) {
-        return r == 1 || c == 1 || r == BOARD_SIZE - 2 || c == BOARD_SIZE - 2;
-    }
-
-    private boolean isOnCenter(int r, int c) {
-        return r == CENTER_POSITION && c == CENTER_POSITION;
     }
 
     private int[][] makeCopy(int[][] p) {

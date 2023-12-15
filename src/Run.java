@@ -13,7 +13,7 @@ public class Run {
                 --add-modules javafx.controls\s
                 -jar "C:\\Users\\geral\\IdeaProjects\\Momentum_44375_44594_38909\\MomentumServer.jar\"""");
 
-        sleep(1000);
+        sleep(2000);
 
 
         MomentumResponse r = new MomentumResponse();
