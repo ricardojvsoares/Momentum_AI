@@ -4,8 +4,6 @@ import static java.lang.Thread.sleep;
 
 public class Run {
 
-    static int moveCount =0;
-
     public static void main(String[] args) throws IOException, InterruptedException {
 
         Process p = Runtime.getRuntime().exec("""
@@ -25,7 +23,6 @@ public class Run {
 
         Process p1 = Runtime.getRuntime().exec("""
                         java -jar "C:\\Users\\geral\\IdeaProjects\\Momentum_44375_44594_38909\\ManualResponse.jar\"""");
-
 
     }
 }

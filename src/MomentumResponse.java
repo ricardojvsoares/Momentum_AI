@@ -36,7 +36,7 @@ public class MomentumResponse implements Runnable {
 
     public MomentumResponse() {
 
-        jf = new JFrame("UPT - IA - MomentumAB");
+        jf = new JFrame("UPT - IA - Momentum_44375_44594_38909");
         new WindowAdapter() {
             public void windowClosing(WindowEvent e) {
                 int res = confirmExit();
@@ -164,7 +164,7 @@ public class MomentumResponse implements Runnable {
         return JOptionPane.showConfirmDialog(
                 null,
                 " Confirm end of program ? ",
-                " UPT - IA - Momentum ",
+                " UPT - IA - Momentum_44375_44594_38909 ",
                 JOptionPane.OK_CANCEL_OPTION,
                 JOptionPane.WARNING_MESSAGE);
     }
