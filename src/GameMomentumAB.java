@@ -8,6 +8,7 @@ public class GameMomentumAB extends NodeGameAB {
     private int newR;
     private int newC;
 
+
     public GameMomentumAB(String node) {
         super(1);
         myColor = getPlayer();
@@ -36,6 +37,13 @@ public class GameMomentumAB extends NodeGameAB {
 
     public ArrayList<Move> expandAB() {
         ArrayList<Move> suc = new ArrayList<>();
+        if(Run.moveCount == 0){
+            GameMomentumAB sucBoard = new GameMomentumAB(board, myColor, getDepth());
+            int moveR = 4;
+            int moveC = 4;
+            suc.add(new Move(moveR+" "+moveC, sucBoard));
+            Run.moveCount += 1;
+        }
 
         for (int r = 0; r < 7; r++) {
             for (int c = 0; c < 7; c++) {
@@ -187,56 +195,50 @@ public class GameMomentumAB extends NodeGameAB {
         int count= 0;
         double dist = 0;
         double h;
-        double distance = 0;
+        double distance;
         double pos = 1;
 
-        int opponentColor;
-        if(myColor == 1){
-            opponentColor = 2;
-        } else {
-            opponentColor = 1;
-        }
+
 
 
         for(int r = 0; r < 7; r++) {
             for(int c = 0; c < 7; c++) {
+                boolean b = c == 0 && r == 0 || c == 0 && r == 6 || c == 6 && r == 0 || c == 6 && r == 6;
                 if(board[r][c] == myColor) {
                     count++;
                     distance = 7 - (Math.abs(r - 3) + Math.abs(c - 3));
-                    dist += distance;
 
                     if(c== 3 && r == 3){
                         pos += 1000;
-                    } else if((c==0 && r == 0) || (c==0 && r == 6) || (c==6 && r==0) || (c==6 && r==6)){
+                    } else if(b){
                         pos += 0;
                     } else if (r == 0 || c == 0 || r == 6 || c == 6){
-                        pos += 0.1;
+                        pos += 0.5;
                     } else if(c== 1 || r == 1 || c == 5 || r == 5){
                         pos += 1.5;
                     } else if(c== 2 || r == 2 || c == 4 || r == 4){
-                        pos += 5;
+                        pos += 2.5;
                     } else {
-                        pos += 50;
+                        pos += 5;
                     }
 
-                }else if (board[r][c] == opponentColor){
+                    dist += distance;
+                }else if (board[r][c] !=0){
                     count--;
 
-                    if(c== 3 && r == 3){
+                    /*if(c== 3 && r == 3){
                         pos -= 1000;
-                    } else if((c==0 && r == 0) || (c==0 && r == 6) || (c==6 && r==0) || (c==6 && r==6)){
+                    } else if(b){
                         pos -= 0;
                     } else if (r == 0 || c == 0 || r == 6 || c == 6){
-                        pos -= 0.1;
+                        pos -= 0.5;
                     } else if(c== 1 || r == 1 || c == 5 || r == 5){
                         pos -= 1.5;
                     } else if(c== 2 || r == 2 || c == 4 || r == 4){
-                        pos -= 5;
+                        pos -= 2.5;
                     } else {
-                        pos -= 50;
-                    }
-
-
+                        pos -= 5;
+                    }*/
                 }
             }
         }

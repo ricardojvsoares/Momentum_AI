@@ -31,8 +31,8 @@ public class MomentumResponse implements Runnable {
     private JTextField jt;
     private JTextField jplayer;
     private JTextField jc;
-    private BufferedReader in = null;		// for receiving data from the server
-    private BufferedWriter out = null;		// for sending data to the server
+    private BufferedReader in = null;
+    private BufferedWriter out = null;
 
     public MomentumResponse() {
 
@@ -172,10 +172,10 @@ public class MomentumResponse implements Runnable {
     /**
      * @param args
      */
-    public static void main(String[] args) {
+    /*public static void main(String[] args) {
         MomentumResponse r = new MomentumResponse();
         r.begin();
 
-    }
+    }*/
 
 }
