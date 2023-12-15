@@ -2,12 +2,13 @@ import java.util.ArrayList;
 
 public class GameMomentumAB extends NodeGameAB {
 
-    private int[][] board = new int[7][7];
+    private static final int BOARD_SIZE = 7;
+    private static final int CENTER_POSITION = 3;
+
+    private int[][] board = new int[BOARD_SIZE][BOARD_SIZE];
     private int[][] newBoard;
     private int myColor;
-    private int newR;
-    private int newC;
-
+    private int newR, newC;
 
     public GameMomentumAB(String node) {
         super(1);
@@ -17,242 +18,286 @@ public class GameMomentumAB extends NodeGameAB {
 
     public GameMomentumAB(int[][] p, int myColor, int depth) {
         super(depth);
-        for (int l = 0; l < 7; l++)
-            for (int c = 0; c < 7; c++)
+        for (int l = 0; l < BOARD_SIZE; l++)
+            for (int c = 0; c < BOARD_SIZE; c++)
                 this.board[l][c] = p[l][c];
         this.myColor = myColor;
     }
 
     public void processNode(String node) {
         String[] v = node.trim().split(" ");
-        for (int l = 0; l < 7; l++)
-            for (int c = 0; c < 7; c++)
+        for (int l = 0; l < BOARD_SIZE; l++)
+            for (int c = 0; c < BOARD_SIZE; c++)
                 try {
-                    board[l][c] = Integer.parseInt(v[l * 7 + c]);
+                    board[l][c] = Integer.parseInt(v[l * BOARD_SIZE + c]);
                 } catch (Exception ex) {
                     ex.printStackTrace();
                     System.out.println("board " + v + "  l " + l + "  c " + c);
                 }
     }
 
+    @Override
     public ArrayList<Move> expandAB() {
-        ArrayList<Move> suc = new ArrayList<>();
-        if(Run.moveCount == 0){
-            GameMomentumAB sucBoard = new GameMomentumAB(board, myColor, getDepth());
-            int moveR = 4;
-            int moveC = 4;
-            suc.add(new Move(moveR+" "+moveC, sucBoard));
-            Run.moveCount += 1;
-        }
+        ArrayList<Move> successors = new ArrayList<>();
 
-        for (int r = 0; r < 7; r++) {
-            for (int c = 0; c < 7; c++) {
-                newBoard = makeCopy(board);
-                newR = 0;
-                newC = 0;
+        newBoard = makeCopy(board);
 
-                if (newBoard[r][c] == 0) {
-                    newBoard[r][c] = myColor;
-
-                    // Mover para cima
-                    if (r - 1 >= 0 && newBoard[r - 1][c] != 0) {
-                        newR = r - 1;
-                        while (newR > 0 && newBoard[newR][c] != 0) {
-                            newR--;
-                        }
-
-                        if (newR == 0) {
-                            newBoard[newR][c] = 0;
-                        } else {
-                            newBoard[newR][c] = newBoard[newR + 1][c];
-                            newBoard[newR + 1][c] = 0;
-                        }
+        if (!boardEmpty(newBoard)) {
+            for (int r = 0; r < BOARD_SIZE; r++) {
+                for (int c = 0; c < BOARD_SIZE; c++) {
+                    if (newBoard[r][c] == 0) {
+                        GameMomentumAB successorBoard = new GameMomentumAB(performMove(newBoard, r, c), myColor, getDepth() + 1);
+                        successors.add(new Move((r + 1) + " " + (c + 1), successorBoard));
                     }
-
-                    // Mover para baixo
-                    if (r + 1 < 7 && newBoard[r + 1][c] != 0) {
-                        newR = r + 1;
-                        while (newR < 6 && newBoard[newR][c] != 0) {
-                            newR++;
-                        }
-
-                        if (newR != 7) {
-                            newBoard[newR][c] = newBoard[newR - 1][c];
-                        }
-                        newBoard[newR - 1][c] = 0;
-                    }
-
-                    // Mover para a esquerda
-                    if (c - 1 >= 0 && newBoard[r][c - 1] != 0) {
-                        newC = c - 1;
-                        while (newC > 0 && newBoard[r][newC] != 0) {
-                            newC--;
-                        }
-
-                        if (newC == 0) {
-                            newBoard[r][newC] = 0;
-                        } else {
-                            newBoard[r][newC] = newBoard[r][newC + 1];
-                            newBoard[r][newC + 1] = 0;
-                        }
-                    }
-
-                    // Mover para a direita
-                    if (c + 1 < 7 && newBoard[r][c + 1] != 0) {
-                        newC = c + 1;
-                        while (newC < 6 && newBoard[r][newC] != 0) {
-                            newC++;
-                        }
-
-                        if (newC != 7) {
-                            newBoard[r][newC] = newBoard[r][newC - 1];
-                        }
-                        newBoard[r][newC - 1] = 0;
-                    }
-
-                    // Mover nas diagonais negativas
-                    if (r - 1 >= 0 && c - 1 >= 0 && newBoard[r - 1][c - 1] != 0) {
-                        newR = r - 1;
-                        newC = c - 1;
-                        while (newR > 0 && newC > 0 && newBoard[newR][newC] != 0) {
-                            newR--;
-                            newC--;
-                        }
-
-                        if (newR == 0 || newC == 0) {
-                            newBoard[newR][newC] = 0;
-                        } else {
-                            newBoard[newR][newC] = newBoard[newR + 1][newC + 1];
-                            newBoard[newR + 1][newC + 1] = 0;
-                        }
-                    }
-
-                    // Mover nas diagonais positivas
-                    if (r + 1 < 7 && c + 1 < 7 && newBoard[r + 1][c + 1] != 0) {
-                        newR = r + 1;
-                        newC = c + 1;
-                        while (newR < 6 && newC < 6 && newBoard[newR][newC] != 0) {
-                            newR++;
-                            newC++;
-                        }
-
-                        if (newR != 7 && newC != 7) {
-                            newBoard[newR][newC] = newBoard[newR - 1][newC - 1];
-                        }
-                        newBoard[newR - 1][newC - 1] = 0;
-                    }
-
-                    // Mover na diagonal negativa/positiva
-                    if ((r - 1) >= 0 && (c + 1) < 7 && newBoard[r - 1][c + 1] != 0) {
-                        newR = r - 1;
-                        newC = c + 1;
-                        while (newR > 0 && newC < 6 && newBoard[newR][newC] != 0) {
-                            newR--;
-                            newC++;
-                        }
-
-                        if (newR == 0 && newBoard[newR][newC] != 0 && newC < 7) {
-                            newBoard[newR][newC] = 0;
-                        } else if (newC == 7) {
-                            newBoard[newR + 1][newC - 1] = 0;
-                        } else if ((newR + 1) < 7 && (newC - 1) >= 0) {
-                            newBoard[newR + 1][newC - 1] = 0;
-                        }
-                    }
-
-                    // Mover na diagonal positiva/negativa
-                    if (r + 1 < 7 && c - 1 >= 0 && newBoard[r + 1][c - 1] != 0) {
-                        newR = r + 1;
-                        newC = c - 1;
-                        while (newR < 6 && newC > 0 && newBoard[newR][newC] != 0) {
-                            newR++;
-                            newC--;
-                        }
-
-                        if (newC == 0 && newBoard[newR][newC] != 0) {
-                            newBoard[newR][newC] = 0;
-                        } else if (newR == 7) {
-                            newBoard[newR - 1][newC + 1] = 0;
-                        } else {
-                            newBoard[newR][newC] = newBoard[newR - 1][newC + 1];
-                            newBoard[newR - 1][newC + 1] = 0;
-                        }
-                    }
-
-                    GameMomentumAB sucBoard = new GameMomentumAB(newBoard, myColor, getDepth() + 1);
-                    int moveR = r + 1;
-                    int moveC = c + 1;
-                    suc.add(new Move(moveR+" "+moveC, sucBoard));
                 }
             }
         }
 
-        return suc;
+        else {
+            GameMomentumAB centerBoard = new GameMomentumAB(performMove(newBoard, 3, 3), myColor, getDepth() + 1);
+            successors.add(new Move("4 4", centerBoard));
+            return successors;
+        }
+
+        return successors;
+    }
+
+    private boolean boardEmpty(int[][] newBoard) {
+        boolean empty= true;
+        for (int r = 0; r < BOARD_SIZE; r++){
+            for (int c = 0; c < BOARD_SIZE; c++){
+                if(newBoard[r][c]!=0){
+                    empty = false;
+                }
+            }
+        }
+        return empty;
+    }
+
+    private int[][] performMove(int[][] newBoard, int r, int c) {
+
+        newR = 0;
+        newC = 0;
+
+        if (newBoard[r][c] == 0) {
+            newBoard[r][c] = myColor;
+
+            // Mover para cima
+            if (r - 1 >= 0 && newBoard[r - 1][c] != 0) {
+                newR = r - 1;
+                while (newR > 0 && newBoard[newR][c] != 0) {
+                    newR--;
+                }
+
+                if (newR == 0) {
+                    newBoard[newR][c] = 0;
+                } else {
+                    newBoard[newR][c] = newBoard[newR + 1][c];
+                    newBoard[newR + 1][c] = 0;
+                }
+            }
+
+            // Mover para baixo
+            if (r + 1 < 7 && newBoard[r + 1][c] != 0) {
+                newR = r + 1;
+                while (newR < 6 && newBoard[newR][c] != 0) {
+                    newR++;
+                }
+
+                if (newR != 7) {
+                    newBoard[newR][c] = newBoard[newR - 1][c];
+                }
+                newBoard[newR - 1][c] = 0;
+            }
+
+            // Mover para a esquerda
+            if (c - 1 >= 0 && newBoard[r][c - 1] != 0) {
+                newC = c - 1;
+                while (newC > 0 && newBoard[r][newC] != 0) {
+                    newC--;
+                }
+
+                if (newC == 0) {
+                    newBoard[r][newC] = 0;
+                } else {
+                    newBoard[r][newC] = newBoard[r][newC + 1];
+                    newBoard[r][newC + 1] = 0;
+                }
+            }
+
+            // Mover para a direita
+            if (c + 1 < 7 && newBoard[r][c + 1] != 0) {
+                newC = c + 1;
+                while (newC < 6 && newBoard[r][newC] != 0) {
+                    newC++;
+                }
+
+                if (newC != 7) {
+                    newBoard[r][newC] = newBoard[r][newC - 1];
+                }
+                newBoard[r][newC - 1] = 0;
+            }
+
+            // Mover nas diagonais negativas
+            if (r - 1 >= 0 && c - 1 >= 0 && newBoard[r - 1][c - 1] != 0) {
+                newR = r - 1;
+                newC = c - 1;
+                while (newR > 0 && newC > 0 && newBoard[newR][newC] != 0) {
+                    newR--;
+                    newC--;
+                }
+
+                if (newR == 0 || newC == 0) {
+                    newBoard[newR][newC] = 0;
+                } else {
+                    newBoard[newR][newC] = newBoard[newR + 1][newC + 1];
+                    newBoard[newR + 1][newC + 1] = 0;
+                }
+            }
+
+            // Mover nas diagonais positivas
+            if (r + 1 < 7 && c + 1 < 7 && newBoard[r + 1][c + 1] != 0) {
+                newR = r + 1;
+                newC = c + 1;
+                while (newR < 6 && newC < 6 && newBoard[newR][newC] != 0) {
+                    newR++;
+                    newC++;
+                }
+
+                if (newR != 7 && newC != 7) {
+                    newBoard[newR][newC] = newBoard[newR - 1][newC - 1];
+                }
+                newBoard[newR - 1][newC - 1] = 0;
+            }
+
+            // Mover na diagonal negativa/positiva
+            if ((r - 1) >= 0 && (c + 1) < 7 && newBoard[r - 1][c + 1] != 0) {
+                newR = r - 1;
+                newC = c + 1;
+                while (newR > 0 && newC < 6 && newBoard[newR][newC] != 0) {
+                    newR--;
+                    newC++;
+                }
+
+                if (newR == 0 && newBoard[newR][newC] != 0 && newC < 7) {
+                    newBoard[newR][newC] = 0;
+                } else if (newC == 7) {
+                    newBoard[newR + 1][newC - 1] = 0;
+                } else if ((newR + 1) < 7 && (newC - 1) >= 0) {
+                    newBoard[newR + 1][newC - 1] = 0;
+                }
+            }
+
+            // Mover na diagonal positiva/negativa
+            if (r + 1 < 7 && c - 1 >= 0 && newBoard[r + 1][c - 1] != 0) {
+                newR = r + 1;
+                newC = c - 1;
+                while (newR < 6 && newC > 0 && newBoard[newR][newC] != 0) {
+                    newR++;
+                    newC--;
+                }
+
+                if (newC == 0 && newBoard[newR][newC] != 0) {
+                    newBoard[newR][newC] = 0;
+                } else if (newR == 7) {
+                    newBoard[newR - 1][newC + 1] = 0;
+                } else {
+                    newBoard[newR][newC] = newBoard[newR - 1][newC + 1];
+                    newBoard[newR - 1][newC + 1] = 0;
+                }
+            }
+        }
+
+        return newBoard;
     }
 
 
+    @Override
     public double getH() {
-        int count= 0;
-        double dist = 0;
+        int count = 0;
         double h;
-        double distance;
         double pos = 1;
+        int op = 1;
+        if(myColor == 1){
+            op = 2;
+        }
 
-
-
-
-        for(int r = 0; r < 7; r++) {
-            for(int c = 0; c < 7; c++) {
-                boolean b = c == 0 && r == 0 || c == 0 && r == 6 || c == 6 && r == 0 || c == 6 && r == 6;
-                if(board[r][c] == myColor) {
+        for (int r = 0; r < BOARD_SIZE; r++) {
+            for (int c = 0; c < BOARD_SIZE; c++) {
+                if (board[r][c] == myColor) {
                     count++;
-                    distance = 7 - (Math.abs(r - 3) + Math.abs(c - 3));
 
-                    if(c== 3 && r == 3){
+                    if (isOnCenter(r, c)) {
                         pos += 1000;
-                    } else if(b){
+                    } else if (isOnBoardEdge(r, c)) {
                         pos += 0;
-                    } else if (r == 0 || c == 0 || r == 6 || c == 6){
+                    } else if (isOnBoardLateral(r, c)) {
                         pos += 0.5;
-                    } else if(c== 1 || r == 1 || c == 5 || r == 5){
+                    } else if (isOnMiddle(r, c)) {
                         pos += 1.5;
-                    } else if(c== 2 || r == 2 || c == 4 || r == 4){
+                    } else if (isOfCenter(r, c)) {
                         pos += 2.5;
                     } else {
                         pos += 5;
                     }
 
-                    dist += distance;
-                }else if (board[r][c] !=0){
+                } else if (board[r][c] != op) {
                     count--;
-
-                    /*if(c== 3 && r == 3){
-                        pos -= 1000;
-                    } else if(b){
+                    if (isOnCenter(r, c)) {
+                        pos = pos - 1000;
+                    } else if (isOnBoardEdge(r, c)) {
                         pos -= 0;
-                    } else if (r == 0 || c == 0 || r == 6 || c == 6){
+                    } else if (isOnBoardLateral(r, c)) {
                         pos -= 0.5;
-                    } else if(c== 1 || r == 1 || c == 5 || r == 5){
+                    } else if (isOnMiddle(r, c)) {
                         pos -= 1.5;
-                    } else if(c== 2 || r == 2 || c == 4 || r == 4){
+                    } else if (isOfCenter(r, c)) {
                         pos -= 2.5;
                     } else {
                         pos -= 5;
-                    }*/
+                    }
+
                 }
             }
         }
 
+        if( count < 0 && pos < 0){
+            return  0.0;
+        }
+        h = count * pos;
+        //h = (5 * dist + count) * pos;
 
-        h = (5*dist + count) * pos;
+        if(h < 0){
+            return 0.0;
+        }
 
         return h;
     }
 
+    private boolean isOfCenter(int r, int c) {
+        return r == 2 || c == 2 || r == BOARD_SIZE - 3 || c == BOARD_SIZE - 3;
+    }
+
+    private boolean isOnBoardEdge(int r, int c) {
+        return r == 0 && c == 0 || r == BOARD_SIZE - 1 && c == BOARD_SIZE - 1 || r == BOARD_SIZE - 1 && c == 0 || r == 0 && c == BOARD_SIZE - 1;
+    }
+
+    private boolean isOnBoardLateral(int r, int c) {
+        return r == 0 || c == 0 || r == BOARD_SIZE - 1 || c == BOARD_SIZE - 1;
+    }
+
+    private boolean isOnMiddle(int r, int c) {
+        return r == 1 || c == 1 || r == BOARD_SIZE - 2 || c == BOARD_SIZE - 2;
+    }
+
+    private boolean isOnCenter(int r, int c) {
+        return r == CENTER_POSITION && c == CENTER_POSITION;
+    }
+
     private int[][] makeCopy(int[][] p) {
-        int[][] np = new int[7][7];
-        for (int l = 0; l < 7; l++)
-            for (int c = 0; c < 7; c++)
+        int[][] np = new int[BOARD_SIZE][BOARD_SIZE];
+        for (int l = 0; l < BOARD_SIZE; l++)
+            for (int c = 0; c < BOARD_SIZE; c++)
                 np[l][c] = p[l][c];
         return np;
     }
@@ -262,17 +307,14 @@ public class GameMomentumAB extends NodeGameAB {
     }
 
     public String toString() {
-        String st = "";
-        for (int l = 0; l < 7; l++) {
-            for (int c = 0; c < 7; c++) {
-                st += " " + (board[l][c] == 0 ? "." : "" + (board[l][c]));
+        StringBuilder st = new StringBuilder();
+        for (int[] row : board) {
+            for (int cell : row) {
+                st.append(" ").append(cell == 0 ? "." : String.valueOf(cell));
             }
-            st += "\n";
+            st.append("\n");
         }
-        st += "\n";
-        return st;
+        st.append("\n");
+        return st.toString();
     }
-
-
-
 }
