@@ -224,17 +224,40 @@ public class GameMomentumAB extends NodeGameAB {
     @Override
     public double getH() {
         double h = 0;
-
+        double placeValue = 0;
+        int myCount,opCount;
         for (int r = 0; r < BOARD_SIZE; r++) {
             for (int c = 0; c < BOARD_SIZE; c++) {
                 int value = SCORES[r][c];
                 int piece = board[r][c];
 
                 if (piece == myColor) {
-                    h += value;
+                    placeValue += value;
                 } else if (piece != 0) {
-                    h -= value;
+                    placeValue -= value;
                 }
+                myCount = 0;
+                opCount = 0;
+                for (int x = -1; x <2;x++){
+                    for (int y = -1 ; y< 2; y++){
+                        boolean inBoard= (r+x)>=0 && (r+x)< 7 && (c+y)>= 0 && (c+y)< 7;
+
+                        if(inBoard){
+                            if(board[r+x][c+y] == myColor){
+                                myCount++;
+                            }
+                            else {
+                                opCount++;
+                            }
+                        }
+
+                    }
+                }
+                if( myCount>opCount){
+                    placeValue = 0;
+                }
+
+                h += placeValue;
             }
         }
 
