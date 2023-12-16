@@ -12,11 +12,11 @@ public class GameMomentumAB extends NodeGameAB {
 
     private final int[][]  SCORES = {
             {0, 1, 1, 1, 1, 1, 0},
-            {1, 2, 4, 4, 4, 2, 1},
-            {1, 4, 50, 100, 50, 4, 1},
-            {1, 4, 100, 1000, 100, 4, 1},
-            {1, 4, 50, 100, 50, 4, 1},
-            {1, 2, 4, 4, 4, 2, 1},
+            {1, 2, 2, 2, 2, 2, 1},
+            {1, 2, 8, 8, 8, 2, 1},
+            {1, 2, 8, 100, 8, 2, 1},
+            {1, 2, 8, 8, 8, 2, 1},
+            {1, 2, 2, 2, 2, 2, 1},
             {0, 1, 1, 1, 1, 1, 0}
     };
 
@@ -224,44 +224,62 @@ public class GameMomentumAB extends NodeGameAB {
     @Override
     public double getH() {
         double h = 0;
-        double placeValue = 0;
+        double placeValue;
         int myCount,opCount;
         for (int r = 0; r < BOARD_SIZE; r++) {
             for (int c = 0; c < BOARD_SIZE; c++) {
-                int value = SCORES[r][c];
-                int piece = board[r][c];
 
-                if (piece == myColor) {
-                    placeValue += value;
-                } else if (piece != 0) {
-                    placeValue -= value;
-                }
-                myCount = 0;
-                opCount = 0;
-                for (int x = -1; x <2;x++){
-                    for (int y = -1 ; y< 2; y++){
-                        boolean inBoard= (r+x)>=0 && (r+x)< 7 && (c+y)>= 0 && (c+y)< 7;
-
-                        if(inBoard){
-                            if(board[r+x][c+y] == myColor){
-                                myCount++;
-                            }
-                            else {
-                                opCount++;
-                            }
-                        }
-
-                    }
-                }
-                if( myCount>opCount){
+                if(board[r][c] != 0){
                     placeValue = 0;
+                    int value = SCORES[r][c];
+
+                    if (isPlayer(r,c)) {
+                        placeValue += value;
+                    } else if (isOP(r,c)) {
+                        placeValue -= value;
+                    }
+                    myCount = 0;
+                    opCount = 0;
+                    for (int x = -1; x <2;x++){
+                        for (int y = -1 ; y< 2; y++){
+                            boolean inBoard= (r+x)>=0 && (r+x)< 7 && (c+y)>= 0 && (c+y)< 7;
+
+                            if(inBoard){
+                                if(isPlayer(r+x,c+y)){
+                                    myCount++;
+                                }
+                                else if(isOP(r+x,c+y)){
+                                    opCount++;
+                                }
+                            }
+
+                        }
+                    }
+                    int diff = myCount - opCount;
+                    placeValue = placeValue * (diff*10);
+                   /* if(diff>=0){
+                        placeValue = 0;
+                    }else {
+                        placeValue *= diff;
+                    }*/
+                    h += placeValue;
                 }
 
-                h += placeValue;
             }
+        }
+        if(h<=0){
+            return 0.0;
         }
 
         return h;
+    }
+
+    private boolean isPlayer(int r, int c){
+        return board[r][c] == myColor;
+    }
+
+    private boolean isOP(int r, int c){
+        return board[r][c] != 0 && board[r][c] != myColor;
     }
 
     private int[][] makeCopy(int[][] p) {
