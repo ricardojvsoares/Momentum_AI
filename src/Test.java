@@ -7,9 +7,9 @@ public class Test {
         GameMomentumAB game = new GameMomentumAB(
                     "0 0 0 0 0 0 0 " +
                             "0 0 0 0 0 0 0 " +
-                            "0 0 0 2 0 0 0 " +
-                            "0 0 2 0 2 0 0 " +
-                            "0 0 0 2 0 0 0 " +
+                            "0 0 0 0 0 0 0 " +
+                            "0 0 0 0 0 0 0 " +
+                            "0 0 0 0 0 0 0 " +
                             "0 0 0 0 0 0 0 " +
                             "0 0 0 0 0 0 0 "
         );
@@ -19,6 +19,7 @@ public class Test {
         Move best;
         best = suc.get(0);
         for(Move m : suc){
+
             if(m.getNode().getH()> best.getNode().getH()){
                 best = m;
             }

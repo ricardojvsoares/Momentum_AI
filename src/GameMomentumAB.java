@@ -13,9 +13,9 @@ public class GameMomentumAB extends NodeGameAB {
     private final int[][]  SCORES = {
             {1, 2, 1, 1, 1, 2, 1},
             {2, 5, 3, 3, 3, 5, 2},
-            {1, 3, 15, 10, 15, 3, 1},
-            {1, 3, 10, 50, 10, 3, 1},
-            {1, 3, 15, 10, 15, 3, 1},
+            {1, 3, 20, 10, 20, 3, 1},
+            {1, 3, 10, 40, 10, 3, 1},
+            {1, 3, 20, 10, 20, 3, 1},
             {2, 5, 3, 3, 3, 5, 2},
             {1, 2, 1, 1, 1, 2, 1}
     };
@@ -70,7 +70,7 @@ public class GameMomentumAB extends NodeGameAB {
         if (newBoard[r][c] == 0) {
             newBoard[r][c] = myColor;
 
-            // Mover para cima
+            // CIMA
             if (r - 1 >= 0 && newBoard[r - 1][c] != 0) {
                 newR = r - 1;
                 while (newR > 0 && newBoard[newR][c] != 0) {
@@ -85,7 +85,7 @@ public class GameMomentumAB extends NodeGameAB {
                 }
             }
 
-            // Mover para baixo
+            // BAIXO
             if (r + 1 < 7 && newBoard[r + 1][c] != 0) {
                 newR = r + 1;
                 while (newR < 6 && newBoard[newR][c] != 0) {
@@ -98,7 +98,7 @@ public class GameMomentumAB extends NodeGameAB {
                 newBoard[newR - 1][c] = 0;
             }
 
-            // Mover para a esquerda
+            // ESQUERDA
             if (c - 1 >= 0 && newBoard[r][c - 1] != 0) {
                 newC = c - 1;
                 while (newC > 0 && newBoard[r][newC] != 0) {
@@ -113,10 +113,10 @@ public class GameMomentumAB extends NodeGameAB {
                 }
             }
 
-            // Mover para a direita
+            // DIREITA
             if (c + 1 < 7 && newBoard[r][c + 1] != 0) {
                 newC = c + 1;
-                while (newC < 7 && newBoard[r][newC] != 0) {
+                while (newC < 6 && newBoard[r][newC] != 0) {
                     newC++;
                 }
 
@@ -126,8 +126,8 @@ public class GameMomentumAB extends NodeGameAB {
                 newBoard[r][newC - 1] = 0;
             }
 
-            // Mover nas diagonais negativas
-            if (r - 1 >= 0 && c - 1 >= 0 && newBoard[r - 1][c - 1] != 0) {
+            // CIMA/ESQUERDA
+            if ((r - 1) >= 0 && (c - 1) >= 0 && newBoard[r - 1][c - 1] != 0) {
                 newR = r - 1;
                 newC = c - 1;
                 while (newR > 0 && newC > 0 && newBoard[newR][newC] != 0) {
@@ -143,22 +143,7 @@ public class GameMomentumAB extends NodeGameAB {
                 }
             }
 
-            // Mover nas diagonais positivas
-            if (r + 1 < 7 && c + 1 < 7 && newBoard[r + 1][c + 1] != 0) {
-                newR = r + 1;
-                newC = c + 1;
-                while (newR < 6 && newC < 6 && newBoard[newR][newC] != 0) {
-                    newR++;
-                    newC++;
-                }
-
-                if (newR != 7 && newC != 7) {
-                    newBoard[newR][newC] = newBoard[newR - 1][newC - 1];
-                }
-                newBoard[newR - 1][newC - 1] = 0;
-            }
-
-            // Mover na diagonal negativa/positiva
+            // CIMA/DIREITA
             if ((r - 1) >= 0 && (c + 1) < 7 && newBoard[r - 1][c + 1] != 0) {
                 newR = r - 1;
                 newC = c + 1;
@@ -167,17 +152,18 @@ public class GameMomentumAB extends NodeGameAB {
                     newC++;
                 }
 
-                if (newR == 0 && newBoard[newR][newC] != 0 && newC < 7) {
+                if (newR == 0 && newBoard[newR][newC] != 0) {
                     newBoard[newR][newC] = 0;
                 } else if (newC == 7) {
                     newBoard[newR + 1][newC - 1] = 0;
                 } else if ((newR + 1) < 7 && (newC - 1) >= 0) {
+                    newBoard[newR][newC] = newBoard[newR + 1][newC - 1];
                     newBoard[newR + 1][newC - 1] = 0;
                 }
             }
 
-            // Mover na diagonal positiva/negativa
-            if (r + 1 < 7 && c - 1 >= 0 && newBoard[r + 1][c - 1] != 0) {
+            // BAIXO/ESQUERDA
+            if ((r + 1) < 7 && (c - 1) >= 0 && newBoard[r + 1][c - 1] != 0) {
                 newR = r + 1;
                 newC = c - 1;
                 while (newR < 6 && newC > 0 && newBoard[newR][newC] != 0) {
@@ -194,6 +180,22 @@ public class GameMomentumAB extends NodeGameAB {
                     newBoard[newR - 1][newC + 1] = 0;
                 }
             }
+
+            // BAIXO/DIREITA
+            if ((r + 1) < 7 && (c + 1) < 7 && newBoard[r + 1][c + 1] != 0) {
+                newR = r + 1;
+                newC = c + 1;
+                while (newR < 6 && newC < 6 && newBoard[newR][newC] != 0) {
+                    newR++;
+                    newC++;
+                }
+
+                if (newR != 7 && newC != 7) {
+                    newBoard[newR][newC] = newBoard[newR - 1][newC - 1];
+                }
+                newBoard[newR - 1][newC - 1] = 0;
+            }
+
         }
 
 
@@ -224,18 +226,20 @@ public class GameMomentumAB extends NodeGameAB {
 
             }
         }
-        h -= (opCount*opValue);
-        h += (myCount*myValue);
-        /*System.out.println("____________________________");
-        System.out.print("Board: " );
-        printBoard(board);
+        h -= (opCount+opValue);
+        h += (myCount+myValue);
 
-        System.out.println("\n\n    OP Value: "+opValue);
-        System.out.println("    MY Value: "+myValue);
-        System.out.println("    OP Count: "+opCount);
-        System.out.println("    MY Count: "+myCount);
+        h += ((myCount - opCount)*20);
+            System.out.println("____________________________");
+            /*System.out.print("Board: " );
+            printBoard(board);*/
 
-        System.out.println("    Heuristic: "+h);*/
+            System.out.println("\n\n    OP Value: "+opValue);
+            System.out.println("    MY Value: "+myValue);
+            System.out.println("    OP Count: "+opCount);
+            System.out.println("    MY Count: "+myCount);
+
+            System.out.println("    Heuristic: "+h);
 
         return h;
     }
