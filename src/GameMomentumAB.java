@@ -29,9 +29,9 @@ public class GameMomentumAB extends NodeGameAB {
 
     public GameMomentumAB(int[][] p, int myColor, int depth) {
         super(depth);
-        for (int l = 0; l < BOARD_SIZE; l++)
+        for (int r = 0; r < BOARD_SIZE; r++)
             for (int c = 0; c < BOARD_SIZE; c++)
-                this.board[l][c] = p[l][c];
+                this.board[r][c] = p[r][c];
         this.myColor = myColor;
     }
 
@@ -137,7 +137,7 @@ public class GameMomentumAB extends NodeGameAB {
             // Mover para a direita
             if (c + 1 < 7 && newBoard[r][c + 1] != 0) {
                 newC = c + 1;
-                while (newC < 6 && newBoard[r][newC] != 0) {
+                while (newC < 7 && newBoard[r][newC] != 0) {
                     newC++;
                 }
 
@@ -223,56 +223,41 @@ public class GameMomentumAB extends NodeGameAB {
 
     @Override
     public double getH() {
-        double h = 0;
-        double placeValue;
-        int myCount,opCount;
+
+        int opCount = 0;
+        int myCount = 0;
+        double h = 0.0;
+        double opValue = 0.0;
+        double myValue = 0.0;
         for (int r = 0; r < BOARD_SIZE; r++) {
             for (int c = 0; c < BOARD_SIZE; c++) {
 
                 if(board[r][c] != 0){
-                    placeValue = 0;
                     int value = SCORES[r][c];
-
                     if (isPlayer(r,c)) {
-                        placeValue += value;
+                        myCount ++;
+                        myValue += value;
                     } else if (isOP(r,c)) {
-                        placeValue -= value;
+                        opCount ++;
+                        opValue += value;
                     }
-                    myCount = 0;
-                    opCount = 0;
-                    for (int x = -1; x <2;x++){
-                        for (int y = -1 ; y< 2; y++){
-                            boolean inBoard= (r+x)>=0 && (r+x)< 7 && (c+y)>= 0 && (c+y)< 7;
-
-                            if(inBoard){
-                                if(isPlayer(r+x,c+y)){
-                                    myCount++;
-                                }
-                                else if(isOP(r+x,c+y)){
-                                    opCount++;
-                                }
-                            }
-
-                        }
-                    }
-                    int diff = myCount - opCount;
-                    placeValue = placeValue * (diff*10);
-                   /* if(diff>=0){
-                        placeValue = 0;
-                    }else {
-                        placeValue *= diff;
-                    }*/
-                    h += placeValue;
                 }
 
             }
         }
-        if(h<=0){
-            return 0.0;
-        }
+        h -= (opCount*opValue);
+        h += (myCount*myValue);
+        System.out.println("    _______");
+        System.out.println("    OP Value: "+opValue);
+        System.out.println("    MY Value: "+myValue);
+        System.out.println("    OP Count: "+opCount);
+        System.out.println("    MY Count: "+myCount);
+        System.out.println("    _______");
 
         return h;
     }
+
+
 
     private boolean isPlayer(int r, int c){
         return board[r][c] == myColor;
