@@ -11,13 +11,13 @@ public class GameMomentumAB extends NodeGameAB {
     private int newR, newC;
 
     private final int[][]  SCORES = {
-            {0, 1, 1, 1, 1, 1, 0},
-            {1, 2, 2, 2, 2, 2, 1},
-            {1, 2, 8, 8, 8, 2, 1},
-            {1, 2, 8, 100, 8, 2, 1},
-            {1, 2, 8, 8, 8, 2, 1},
-            {1, 2, 2, 2, 2, 2, 1},
-            {0, 1, 1, 1, 1, 1, 0}
+            {1, 2, 1, 1, 1, 2, 1},
+            {2, 5, 3, 3, 3, 5, 2},
+            {1, 3, 15, 10, 15, 3, 1},
+            {1, 3, 10, 50, 10, 3, 1},
+            {1, 3, 15, 10, 15, 3, 1},
+            {2, 5, 3, 3, 3, 5, 2},
+            {1, 2, 1, 1, 1, 2, 1}
     };
 
 
@@ -51,36 +51,15 @@ public class GameMomentumAB extends NodeGameAB {
     public ArrayList<Move> expandAB() {
         ArrayList<Move> successors = new ArrayList<>();
 
-        if (!boardEmpty(board)) {
-            for (int r = 0; r < BOARD_SIZE; r++) {
-                for (int c = 0; c < BOARD_SIZE; c++) {
-                    if (board[r][c] == 0) {
-                        GameMomentumAB successorBoard = new GameMomentumAB(performMove(board, r, c), myColor, getDepth() + 1);
-                        successors.add(new Move((r + 1) + " " + (c + 1), successorBoard));
-                    }
+        for (int r = 0; r < BOARD_SIZE; r++) {
+            for (int c = 0; c < BOARD_SIZE; c++) {
+                if (board[r][c] == 0) {
+                    GameMomentumAB successorBoard = new GameMomentumAB(performMove(board, r, c), myColor, getDepth() + 1);
+                    successors.add(new Move((r + 1) + " " + (c + 1), successorBoard));
                 }
             }
         }
-
-        else {
-            GameMomentumAB centerBoard = new GameMomentumAB(performMove(board, 3, 3), myColor, getDepth() + 1);
-            successors.add(new Move("4 4", centerBoard));
-
-        }
-
         return successors;
-    }
-
-    private boolean boardEmpty(int[][] newBoard) {
-        boolean empty= true;
-        for (int r = 0; r < BOARD_SIZE; r++){
-            for (int c = 0; c < BOARD_SIZE; c++){
-                if(newBoard[r][c]!=0){
-                    empty = false;
-                }
-            }
-        }
-        return empty;
     }
 
     private int[][] performMove(int[][] board, int r, int c) {
@@ -247,12 +226,16 @@ public class GameMomentumAB extends NodeGameAB {
         }
         h -= (opCount*opValue);
         h += (myCount*myValue);
-        System.out.println("    _______");
-        System.out.println("    OP Value: "+opValue);
+        /*System.out.println("____________________________");
+        System.out.print("Board: " );
+        printBoard(board);
+
+        System.out.println("\n\n    OP Value: "+opValue);
         System.out.println("    MY Value: "+myValue);
         System.out.println("    OP Count: "+opCount);
         System.out.println("    MY Count: "+myCount);
-        System.out.println("    _______");
+
+        System.out.println("    Heuristic: "+h);*/
 
         return h;
     }
@@ -277,6 +260,15 @@ public class GameMomentumAB extends NodeGameAB {
 
     public void setMyColor(int color) {
         myColor = color;
+    }
+
+    private void printBoard(int[][] p) {
+        for (int r = 0; r < BOARD_SIZE; r++) {
+            System.out.println();
+            for (int c = 0; c < BOARD_SIZE; c++) {
+                System.out.print("  "+board[r][c]);
+            }
+        }
     }
 
     public String toString() {
