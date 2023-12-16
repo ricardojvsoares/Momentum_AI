@@ -92,10 +92,12 @@ public class GameMomentumAB extends NodeGameAB {
                     newR++;
                 }
 
-                if (newR != 7) {
+                if (newR == 6) {
+                    newBoard[newR][c] = 0;
+                } else {
                     newBoard[newR][c] = newBoard[newR - 1][c];
+                    newBoard[newR - 1][c] = 0;
                 }
-                newBoard[newR - 1][c] = 0;
             }
 
             // ESQUERDA
@@ -116,7 +118,7 @@ public class GameMomentumAB extends NodeGameAB {
             // DIREITA
             if (c + 1 < 7 && newBoard[r][c + 1] != 0) {
                 newC = c + 1;
-                while (newC < 6 && newBoard[r][newC] != 0) {
+                while (newC < 7 && newBoard[r][newC] != 0) {
                     newC++;
                 }
 
@@ -152,7 +154,7 @@ public class GameMomentumAB extends NodeGameAB {
                     newC++;
                 }
 
-                if (newR == 0 && newBoard[newR][newC] != 0) {
+                if (newR == 0 && newBoard[newR][newC] != 0 && newC<7) {
                     newBoard[newR][newC] = 0;
                 } else if (newC == 7) {
                     newBoard[newR + 1][newC - 1] = 0;
@@ -185,7 +187,7 @@ public class GameMomentumAB extends NodeGameAB {
             if ((r + 1) < 7 && (c + 1) < 7 && newBoard[r + 1][c + 1] != 0) {
                 newR = r + 1;
                 newC = c + 1;
-                while (newR < 6 && newC < 6 && newBoard[newR][newC] != 0) {
+                while (newR < 7 && newC < 7 && newBoard[newR][newC] != 0) {
                     newR++;
                     newC++;
                 }
@@ -229,18 +231,24 @@ public class GameMomentumAB extends NodeGameAB {
         h -= (opCount+opValue);
         h += (myCount+myValue);
 
-        h += ((myCount - opCount)*20);
-            System.out.println("____________________________");
-            /*System.out.print("Board: " );
-            printBoard(board);*/
+        int pieceValue = 20;
+        if(opCount==7){
+            pieceValue = 10000;
+        }
+        h += ((myCount - opCount)*pieceValue);
+       /* System.out.println("____________________________");
+        System.out.print("Board: " );
+        printBoard(board);
 
-            System.out.println("\n\n    OP Value: "+opValue);
-            System.out.println("    MY Value: "+myValue);
-            System.out.println("    OP Count: "+opCount);
-            System.out.println("    MY Count: "+myCount);
+        System.out.println("\n\n    OP Value: "+opValue);
+        System.out.println("    MY Value: "+myValue);
+        System.out.println("    OP Count: "+opCount);
+        System.out.println("    MY Count: "+myCount);
+        System.out.println("    Heuristic: "+h);*/
 
-            System.out.println("    Heuristic: "+h);
-
+        if(myCount == 8){
+            return 1000000;
+        }
         return h;
     }
 
