@@ -24,8 +24,7 @@ public class Run {
         sleep(1000);
 
 
-      /*  Process p1 = Runtime.getRuntime().exec("""
+        Process p1 = Runtime.getRuntime().exec("""
                         java -jar "C:\\Users\\geral\\IdeaProjects\\Momentum_44375_44594_38909\\ManualResponse.jar\"""");
-*/
     }
 }
