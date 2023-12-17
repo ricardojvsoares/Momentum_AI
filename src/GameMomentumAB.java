@@ -4,7 +4,6 @@ public class GameMomentumAB extends NodeGameAB {
 
     private static final int BOARD_SIZE = 7;
     private static final int CENTER_POSITION = 3;
-
     private int[][] board = new int[BOARD_SIZE][BOARD_SIZE];
     private int[][] newBoard;
     private int myColor;
@@ -206,7 +205,7 @@ public class GameMomentumAB extends NodeGameAB {
 
     @Override
     public double getH() {
-
+        int pieceValue = 20;
         int opCount = 0;
         int myCount = 0;
         double h = 0.0;
@@ -231,10 +230,8 @@ public class GameMomentumAB extends NodeGameAB {
         h -= (opCount+opValue);
         h += (myCount+myValue);
 
-        int pieceValue = 20;
-        if(opCount==7){
-            pieceValue = 10000;
-        }
+
+
         h += ((myCount - opCount)*pieceValue);
        /* System.out.println("____________________________");
         System.out.print("Board: " );
@@ -247,8 +244,12 @@ public class GameMomentumAB extends NodeGameAB {
         System.out.println("    Heuristic: "+h);*/
 
         if(myCount == 8){
-            return 1000000;
+            return 10000;
         }
+        if( opCount == 8){
+            return -10000;
+        }
+
         return h;
     }
 

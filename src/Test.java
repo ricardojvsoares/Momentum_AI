@@ -4,14 +4,18 @@ public class Test {
 
     public static void main(String[] args) {
 
+
+
+
+
         GameMomentumAB game = new GameMomentumAB(
-                    "0 0 0 0 0 0 0 " +
-                            "1 0 0 0 0 0 1 " +
-                            "0 1 0 0 0 1 0 " +
+                    "2 0 0 0 0 0 1 " +
+                            "0 0 0 0 0 0 1 " +
+                            "0 1 0 0 0 0 0 " +
+                            "0 1 0 2 2 0 0 " +
                             "0 0 2 2 2 0 0 " +
-                            "1 2 2 2 0 0 0 " +
-                            "0 0 0 0 0 0 0 " +
-                            "1 0 0 0 0 0 1 "
+                            "0 1 0 0 0 2 0 " +
+                            "2 0 0 0 0 0 1 "
         );
 
         game.setMyColor(1);
@@ -19,7 +23,7 @@ public class Test {
         Move best;
         best = suc.get(0);
         for(Move m : suc){
-            System.out.print(m.getNode().getH());
+            System.out.println(m.getNode().getH());
             if(m.getNode().getH()> best.getNode().getH()){
                 best = m;
             }
