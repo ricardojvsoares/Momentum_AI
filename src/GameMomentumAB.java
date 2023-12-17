@@ -234,15 +234,15 @@ public class GameMomentumAB extends NodeGameAB {
 
 
         h += ((myCount - opCount)*pieceValue);
-        /*System.out.println("____________________________");
-        System.out.print("Board: " );
-        printBoard(board);
+        System.out.println("____________________________");
+       /* System.out.print("Board: " );
+        printBoard(board);*/
 
-        System.out.println("\n\n    OP Value: "+opValue);
+        System.out.println("    OP Value: "+opValue);
         System.out.println("    MY Value: "+myValue);
         System.out.println("    OP Count: "+opCount);
         System.out.println("    MY Count: "+myCount);
-        System.out.println("    Heuristic: "+h);*/
+        System.out.println("    Heuristic: "+h);
 
         if(myCount == 8){
             return 10000;
