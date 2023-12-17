@@ -9,13 +9,13 @@ public class Test {
 
 
         GameMomentumAB game = new GameMomentumAB(
-                    "2 0 0 0 0 0 1 " +
+                    "0 0 0 0 0 0 1 " +
                             "0 0 0 0 0 0 1 " +
                             "0 1 0 0 0 0 0 " +
                             "0 1 0 2 2 0 0 " +
                             "0 0 2 2 2 0 0 " +
-                            "0 1 0 0 0 2 0 " +
-                            "2 0 0 0 0 0 1 "
+                            "0 0 0 0 0 2 0 " +
+                            "2 0 0 1 0 0 1 "
         );
 
         game.setMyColor(1);

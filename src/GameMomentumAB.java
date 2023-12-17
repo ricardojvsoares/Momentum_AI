@@ -58,6 +58,7 @@ public class GameMomentumAB extends NodeGameAB {
                 }
             }
         }
+
         return successors;
     }
 
@@ -233,7 +234,7 @@ public class GameMomentumAB extends NodeGameAB {
 
 
         h += ((myCount - opCount)*pieceValue);
-       /* System.out.println("____________________________");
+        /*System.out.println("____________________________");
         System.out.print("Board: " );
         printBoard(board);
 
@@ -246,9 +247,13 @@ public class GameMomentumAB extends NodeGameAB {
         if(myCount == 8){
             return 10000;
         }
-        if( opCount == 8){
+
+        if( opCount >=7){
             return -10000;
         }
+
+
+
 
         return h;
     }
