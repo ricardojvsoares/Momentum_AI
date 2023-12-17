@@ -4,9 +4,12 @@ public class GameMomentumAB extends NodeGameAB {
 
     private static final int BOARD_SIZE = 7;
     private static final int CENTER_POSITION = 3;
+
+
+
     private int[][] board = new int[BOARD_SIZE][BOARD_SIZE];
     private int[][] newBoard;
-    private int myColor;
+    private int myColor, opColor;
     private int newR, newC;
 
     private final int[][]  SCORES = {
@@ -26,12 +29,38 @@ public class GameMomentumAB extends NodeGameAB {
         processNode(node);
     }
 
+
+    void setOpColor(){
+        if(this.myColor==1){
+            this.opColor = 2;
+        }else{
+            this.opColor = 1;
+        }
+    }
+
+    void setMyColor(){
+        if(this.opColor==1){
+            this.myColor = 2;
+        }else{
+            this.myColor = 1;
+        }
+    }
+
     public GameMomentumAB(int[][] p, int myColor, int depth) {
         super(depth);
+        if(depth%2 ==1){
+            this.opColor = myColor;
+            setMyColor();
+        }else {
+            this.myColor = myColor;
+            setOpColor();
+        }
+
         for (int r = 0; r < BOARD_SIZE; r++)
             for (int c = 0; c < BOARD_SIZE; c++)
                 this.board[r][c] = p[r][c];
-        this.myColor = myColor;
+
+
     }
 
     public void processNode(String node) {
@@ -53,7 +82,7 @@ public class GameMomentumAB extends NodeGameAB {
         for (int r = 0; r < BOARD_SIZE; r++) {
             for (int c = 0; c < BOARD_SIZE; c++) {
                 if (board[r][c] == 0) {
-                    GameMomentumAB successorBoard = new GameMomentumAB(performMove(board, r, c), myColor, getDepth() + 1);
+                    GameMomentumAB successorBoard = new GameMomentumAB(performMove(board, r, c), myColor, getDepth() + 1 );
                     successors.add(new Move((r + 1) + " " + (c + 1), successorBoard));
                 }
             }
@@ -228,12 +257,10 @@ public class GameMomentumAB extends NodeGameAB {
         h -= (opCount+opValue);
         h += (myCount+myValue);
 
-
-
         h += ((myCount - opCount)*pieceValue);
         /*System.out.println("____________________________");
-        System.out.print("Board: " );
-        printBoard(board);
+        //System.out.print("Board: " );
+        //printBoard(board);
 
         System.out.println("\n\n    OP Value: "+opValue);
         System.out.println("    MY Value: "+myValue);
@@ -245,12 +272,9 @@ public class GameMomentumAB extends NodeGameAB {
             return 10000;
         }
 
-        if( opCount >=7){
+        if(opCount >=7){
             return -10000;
         }
-
-
-
 
         return h;
     }
@@ -262,7 +286,7 @@ public class GameMomentumAB extends NodeGameAB {
     }
 
     private boolean isOP(int r, int c){
-        return board[r][c] != 0 && board[r][c] != myColor;
+        return board[r][c] == opColor;
     }
 
     private int[][] makeCopy(int[][] p) {
