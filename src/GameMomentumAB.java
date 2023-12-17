@@ -73,46 +73,43 @@ public class GameMomentumAB extends NodeGameAB {
             // CIMA
             if (r - 1 >= 0 && newBoard[r - 1][c] != 0) {
                 newR = r - 1;
-                while (newR > 0 && newBoard[newR][c] != 0) {
+                while (newR >= 0 && newBoard[newR][c] != 0) {
                     newR--;
                 }
 
-                if (newR == 0) {
-                    newBoard[newR][c] = 0;
-                } else {
-                    newBoard[newR][c] = newBoard[newR + 1][c];
-                    newBoard[newR + 1][c] = 0;
+                if (newR != -1) {
+                    newBoard[newR][c] = newBoard[newR+1][c];
                 }
+                newBoard[newR+1][c] = 0;
+
             }
 
             // BAIXO
             if (r + 1 < 7 && newBoard[r + 1][c] != 0) {
                 newR = r + 1;
-                while (newR < 6 && newBoard[newR][c] != 0) {
+                while (newR < 7 && newBoard[newR][c] != 0) {
                     newR++;
                 }
 
-                if (newR == 6) {
-                    newBoard[newR][c] = 0;
-                } else {
-                    newBoard[newR][c] = newBoard[newR - 1][c];
-                    newBoard[newR - 1][c] = 0;
+                if (newR != 7) {
+                    newBoard[newR][c] = newBoard[newR-1][c];
                 }
+                newBoard[newR-1][c] = 0;
+
             }
 
             // ESQUERDA
             if (c - 1 >= 0 && newBoard[r][c - 1] != 0) {
                 newC = c - 1;
-                while (newC > 0 && newBoard[r][newC] != 0) {
+                while (newC >= 0 && newBoard[r][newC] != 0) {
                     newC--;
                 }
 
-                if (newC == 0) {
-                    newBoard[r][newC] = 0;
-                } else {
+                if (newC != -1) {
                     newBoard[r][newC] = newBoard[r][newC + 1];
-                    newBoard[r][newC + 1] = 0;
                 }
+                newBoard[r][newC + 1] = 0;
+
             }
 
             // DIREITA
@@ -129,21 +126,21 @@ public class GameMomentumAB extends NodeGameAB {
             }
 
             // CIMA/ESQUERDA
-            if ((r - 1) >= 0 && (c - 1) >= 0 && newBoard[r - 1][c - 1] != 0) {
+            if ((r - 1) >=0 && (c - 1) >=0 && newBoard[r - 1][c - 1] != 0) {
                 newR = r - 1;
                 newC = c - 1;
-                while (newR > 0 && newC > 0 && newBoard[newR][newC] != 0) {
+                while (newR >=0  && newC >=0 && newBoard[newR][newC] != 0) {
                     newR--;
                     newC--;
                 }
 
-                if (newR == 0 || newC == 0) {
-                    newBoard[newR][newC] = 0;
-                } else {
+                if (newR != -1 && newC != -1) {
                     newBoard[newR][newC] = newBoard[newR + 1][newC + 1];
-                    newBoard[newR + 1][newC + 1] = 0;
                 }
+                newBoard[newR + 1][newC + 1] = 0;
             }
+
+
 
             // CIMA/DIREITA
             if ((r - 1) >= 0 && (c + 1) < 7 && newBoard[r - 1][c + 1] != 0) {
@@ -234,15 +231,15 @@ public class GameMomentumAB extends NodeGameAB {
 
 
         h += ((myCount - opCount)*pieceValue);
-        System.out.println("____________________________");
-       /* System.out.print("Board: " );
-        printBoard(board);*/
+        /*System.out.println("____________________________");
+        System.out.print("Board: " );
+        printBoard(board);
 
-        System.out.println("    OP Value: "+opValue);
+        System.out.println("\n\n    OP Value: "+opValue);
         System.out.println("    MY Value: "+myValue);
         System.out.println("    OP Count: "+opCount);
         System.out.println("    MY Count: "+myCount);
-        System.out.println("    Heuristic: "+h);
+        System.out.println("    Heuristic: "+h);*/
 
         if(myCount == 8){
             return 10000;

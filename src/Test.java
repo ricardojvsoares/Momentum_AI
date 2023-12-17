@@ -8,7 +8,7 @@ public class Test {
 
 
 
-       /* GameMomentumAB game = new GameMomentumAB(
+        GameMomentumAB game = new GameMomentumAB(
                     "0 0 0 0 0 0 1 " +
                             "0 0 0 0 0 0 1 " +
                             "0 1 0 0 0 0 0 " +
@@ -17,16 +17,15 @@ public class Test {
                             "0 0 0 0 0 2 0 " +
                             "2 0 0 1 0 0 1 "
         );
-*/
-        GameMomentumAB game = new GameMomentumAB(
-                "0 0 0 0 0 0 0 " +
-                        "0 0 0 0 0 0 0 " +
-                        "0 0 0 0 0 0 0 " +
-                        "0 0 0 0 0 0 0 " +
-                        "0 0 0 0 0 0 0 " +
-                        "0 0 0 0 0 0 0 " +
-                        "0 0 0 0 0 0 0 "
-        );
+        /*GameMomentumAB game = new GameMomentumAB(
+                "2 0 0 2 0 0 2 " +
+                        "0 2 0 2 0 2 0 " +
+                        "0 0 2 2 2 0 0 " +
+                        "2 2 2 0 2 2 2 " +
+                        "0 0 2 2 2 0 0 " +
+                        "0 2 0 2 0 2 0 " +
+                        "2 0 0 2 0 0 2 "
+        );*/
 
 
         game.setMyColor(1);
@@ -35,13 +34,13 @@ public class Test {
         best = suc.get(0);
         for(Move m : suc){
             System.out.println(m.getNode().getH());
-          /*  if(m.getNode().getH()> best.getNode().getH()){
+            if(m.getNode().getH()> best.getNode().getH()){
                 best = m;
-            }*/
+            }
         }
 
-        /*System.out.print("\n\n\n_____________:BEST:_____________\n");
-        System.out.print(best);*/
+        System.out.print("\n\n\n_____________:BEST:_____________\n");
+        System.out.print(best);
 
     }
 }
