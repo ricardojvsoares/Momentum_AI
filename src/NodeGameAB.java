@@ -67,7 +67,7 @@ public abstract class NodeGameAB {
         ArrayList<Move> suc = expandAB();
         double largest = DEFEAT - 1;
         bestMove = null;
-        maxDepth = 5;       // no mínimo...
+        maxDepth = 10;       // no mínimo...
         startTime = new Date();
         while (getSeconds() < LIMIT_TIME && maxDepth < 50 && largest < VICTORY) {
             Move bestOfDepth = null;

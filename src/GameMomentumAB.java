@@ -269,11 +269,11 @@ public class GameMomentumAB extends NodeGameAB {
         System.out.println("    Heuristic: "+h);*/
 
         if(myCount == 8){
-            return 10000;
+            return (h * 10000);
         }
 
         if(opCount >=7){
-            return -10000;
+            return -(h * 10000);
         }
 
         return h;
