@@ -13,13 +13,13 @@ public class GameMomentumAB extends NodeGameAB {
     private int newR, newC;
 
     private final int[][]  SCORES = {
-            {1, 2, 1, 1, 1, 2, 1},
-            {2, 5, 3, 3, 3, 5, 2},
-            {1, 3, 20, 10, 20, 3, 1},
-            {1, 3, 10, 40, 10, 3, 1},
-            {1, 3, 20, 10, 20, 3, 1},
-            {2, 5, 3, 3, 3, 5, 2},
-            {1, 2, 1, 1, 1, 2, 1}
+            {1, 2, 2, 2, 2, 2, 1},
+            {2, 5, 5, 5, 5, 5, 2},
+            {2, 5, 20, 20, 20, 5, 2},
+            {2, 5, 20, 40, 20, 5, 2},
+            {2, 5, 20, 20, 20, 5, 2},
+            {2, 5, 5, 5, 5, 5, 2},
+            {1, 2, 2, 2, 2, 2, 1}
     };
 
 
@@ -225,8 +225,6 @@ public class GameMomentumAB extends NodeGameAB {
             }
 
         }
-
-
         return newBoard;
     }
 
@@ -269,13 +267,16 @@ public class GameMomentumAB extends NodeGameAB {
         System.out.println("    Heuristic: "+h);*/
 
         if(myCount == 8){
-            return (h * 10000);
+            return 10000;
         }
 
         if(opCount >=7){
-            return -(h * 10000);
+            return -(Math.abs((h * 10000)));
         }
 
+        if( h == -0.0){
+            return 0.0;
+        }
         return h;
     }
 

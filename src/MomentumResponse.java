@@ -25,6 +25,7 @@ public class MomentumResponse implements Runnable {
     private Socket s;
     private int port = 0xBAC0;
     private static final String SERVER_IP = "127.0.0.1";
+    //private static final String SERVER_IP = "10.2.204.119";
     private boolean run;
     private JFrame jf;
     private JPanel jMainPanel;

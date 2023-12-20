@@ -8,7 +8,7 @@ import javax.swing.JTextField;
 public abstract class NodeGameAB {
     private static int player;
     private static int maxDepth;
-    private static int LIMIT_TIME = 5;
+    private static int LIMIT_TIME = 15;
     public static int VICTORY = 1000000;
     public static int DEFEAT = -1000000;
 
